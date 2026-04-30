@@ -76,7 +76,9 @@ class KnowledgeBase:
         return DatasetInfo(
             generated_at=metadata.get("generated_at"),
             page_count=int(metadata.get("page_count", 0)),
-            sources={key: int(value) for key, value in metadata.get("sources", {}).items()},
+            sources={
+                key: int(value) for key, value in metadata.get("sources", {}).items()
+            },
         )
 
     def _download_file(self, filename: str) -> str:
@@ -100,7 +102,9 @@ class KnowledgeBase:
             ],
         }
 
-    def browse_docs(self, limit: int = 50, source: str | None = None) -> list[dict[str, Any]]:
+    def browse_docs(
+        self, limit: int = 50, source: str | None = None
+    ) -> list[dict[str, Any]]:
         query = """
             SELECT page_id, title, source_system, source_url, updated_at
             FROM pages
@@ -226,6 +230,11 @@ mcp = FastMCP(
 @mcp.custom_route("/", methods=["GET"])
 async def root_page(request) -> HTMLResponse:
     base_url = str(request.base_url).rstrip("/")
+    base_url = (
+        base_url.replace("http://", "https://")
+        if "localhost" not in base_url
+        else base_url
+    )
     mcp_url = f"{base_url}/mcp"
     html = (
         "<!doctype html>"
@@ -235,7 +244,7 @@ async def root_page(request) -> HTMLResponse:
         "<meta name='viewport' content='width=device-width, initial-scale=1'>"
         "<title>Statskontoret MCP</title>"
         "</head>"
-        "<body style=\"font-family: sans-serif; max-width: 48rem; margin: 3rem auto; padding: 0 1rem; line-height: 1.5;\">"
+        '<body style="font-family: sans-serif; max-width: 48rem; margin: 3rem auto; padding: 0 1rem; line-height: 1.5;">'
         "<p>This space doesn't have a user interface. It is used to host an MCP server that can be found at: "
         f"<a href='{mcp_url}' target='_blank' rel='noopener noreferrer'>{mcp_url}</a>. "
         f"You can read more <a href='{SPACE_README_URL}' target='_blank' rel='noopener noreferrer'>here</a>.</p>"
@@ -260,7 +269,9 @@ def health() -> dict[str, Any]:
 
 
 @mcp.tool
-def search_docs(query: str, limit: int = 10, source: str | None = None) -> list[dict[str, Any]]:
+def search_docs(
+    query: str, limit: int = 10, source: str | None = None
+) -> list[dict[str, Any]]:
     """Search page-level documents by lexical BM25 ranking."""
     return kb.search_docs(query=query, limit=limit, source=source)
 
