@@ -5,7 +5,7 @@ colorFrom: blue
 colorTo: gray
 sdk: docker
 app_port: 7860
-short_description: MCP server for searching public Statskontoret website content.
+short_description: MCP server for Statskontoret website search.
 datasets:
   - Statskontoretdatalabb/StatskontoretWebsites
 preload_from_hub:
