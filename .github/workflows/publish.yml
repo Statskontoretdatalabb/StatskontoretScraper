@@ -21,3 +21,10 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: uv run statskontoret-scraper publish
+      - name: Restart MCP Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: >
+          curl -X POST
+          -H "Authorization: Bearer $HF_TOKEN"
+          "https://huggingface.co/api/spaces/Statskontoretdatalabb/StatskontoretMCP/restart"
