@@ -1,7 +1,5 @@
 # Statskontoret MCP Space
 
-This directory is synced to the Hugging Face Space [Statskontoretdatalabb/StatskontoretMCP]():
+This is the code of a lightweight MCP server exposing a full text search API to browse through the content of Statskontoret's websites. It fetches its data from the HuggingFace dataset.
 
-- `Statskontoretdatalabb/StatskontoretMCP`
-
-Only files inside `mcp/` are mirrored to the Space by GitHub Actions.
+This directory is synced to the Hugging Face Space [Statskontoretdatalabb/StatskontoretMCP](https://huggingface.co/spaces/Statskontoretdatalabb/StatskontoretMCP). The space acts as the infrastructure for the server.
