@@ -1,0 +1,43 @@
+[
+  {
+    "name": "statskontoret",
+    "kind": "sitemap",
+    "allowed_domains": ["www.statskontoret.se"],
+    "start_urls": ["https://www.statskontoret.se/sitemap.xml"],
+    "content_selectors": ["article"],
+    "title_selector": "h1::text",
+    "updated_meta_names": ["last-modified", "revised"],
+    "exclude_url_prefixes": [
+      "https://www.statskontoret.se/Sok/",
+      "https://www.statskontoret.se/sok/",
+      "https://www.statskontoret.se/personal/",
+      "https://www.statskontoret.se/specialsidor/",
+      "https://www.statskontoret.se/kunskapsstod-och-regler/utbildningar/import-externt-system/"
+    ]
+  },
+  {
+    "name": "forum",
+    "kind": "seeded",
+    "allowed_domains": ["forum.statskontoret.se"],
+    "start_urls": [
+      "https://forum.statskontoret.se/redovisning-och-finansiering/",
+      "https://forum.statskontoret.se/styrning/",
+      "https://forum.statskontoret.se/verksamhetsutveckling/",
+      "https://forum.statskontoret.se/konsekvensutredning/",
+      "https://forum.statskontoret.se/ea-regelverket/",
+      "https://forum.statskontoret.se/vanliga-fragor/"
+    ],
+    "content_selectors": [
+      "div.article-page__container",
+      "div.subject-page",
+      "div.regelverk-page__box"
+    ],
+    "title_selector": "h1::text",
+    "updated_meta_names": ["last-modified", "revised"],
+    "link_selectors": [
+      "ul.tree a::attr(href)",
+      "nav.sub-page-links a::attr(href)",
+      "div.subject-page__link-boxes a::attr(href)"
+    ]
+  }
+]

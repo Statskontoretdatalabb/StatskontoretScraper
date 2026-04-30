@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "statskontoret-scraper"
+version = "0.1.0"
+description = "Scrape Statskontoret's public websites and publish their text as structured open data."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "markdownify>=1.1.0",
+    "pyarrow>=20.0.0",
+    "scrapy>=2.13.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.5",
+]
+
+[project.scripts]
+statskontoret-scraper = "statskontoret_scraper.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["statskontoret_scraper*"]
+
