@@ -9,14 +9,11 @@ description = "Scrape Statskontoret's public websites and publish their text as 
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "huggingface_hub>=0.34.0",
     "markdownify>=1.1.0",
     "pyarrow>=20.0.0",
+    "python-dotenv>=1.1.0",
     "scrapy>=2.13.0",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.3.5",
 ]
 
 [project.scripts]
@@ -27,4 +24,3 @@ include-package-data = true
 
 [tool.setuptools.packages.find]
 include = ["statskontoret_scraper*"]
-
