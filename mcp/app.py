@@ -237,8 +237,8 @@ async def root_page(request) -> HTMLResponse:
         "</head>"
         "<body style=\"font-family: sans-serif; max-width: 48rem; margin: 3rem auto; padding: 0 1rem; line-height: 1.5;\">"
         "<p>This space doesn't have a user interface. It is used to host an MCP server that can be found at: "
-        f"<a href='{mcp_url}'>{mcp_url}</a>. "
-        f"You can read more <a href='{SPACE_README_URL}'>here</a>.</p>"
+        f"<a href='{mcp_url}' target='_blank' rel='noopener noreferrer'>{mcp_url}</a>. "
+        f"You can read more <a href='{SPACE_README_URL}' target='_blank' rel='noopener noreferrer'>here</a>.</p>"
         "</body>"
         "</html>"
     )
