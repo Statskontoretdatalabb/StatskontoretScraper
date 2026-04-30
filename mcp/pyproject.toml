@@ -11,6 +11,7 @@ dependencies = [
     "duckdb>=1.4.0",
     "fastmcp>=2.13.0",
     "huggingface_hub>=0.34.0",
+    "starlette>=0.48.0",
 ]
 
 [tool.setuptools]

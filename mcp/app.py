@@ -12,9 +12,11 @@ from typing import Any
 import duckdb
 from fastmcp import FastMCP
 from huggingface_hub import hf_hub_download
+from starlette.responses import HTMLResponse
 
 DATASET_REPO_ID = "Statskontoretdatalabb/StatskontoretWebsites"
 PARQUET_FILES = ("statskontoret_pages.parquet", "forum_pages.parquet")
+SPACE_README_URL = "https://huggingface.co/spaces/Statskontoretdatalabb/StatskontoretMCP/blob/main/README.md"
 
 
 @dataclass(frozen=True)
@@ -213,11 +215,34 @@ startup_status = StartupStatus(
 )
 mcp = FastMCP(
     name="StatskontoretMCP",
+    version="0.1.0",
     instructions=(
         "Use this server to search and fetch public page-level content from Statskontoret websites. "
         "Search results are lexical and should usually be followed by fetch_doc for the full markdown."
     ),
 )
+
+
+@mcp.custom_route("/", methods=["GET"])
+async def root_page(request) -> HTMLResponse:
+    base_url = str(request.base_url).rstrip("/")
+    mcp_url = f"{base_url}/mcp"
+    html = (
+        "<!doctype html>"
+        "<html lang='en'>"
+        "<head>"
+        "<meta charset='utf-8'>"
+        "<meta name='viewport' content='width=device-width, initial-scale=1'>"
+        "<title>Statskontoret MCP</title>"
+        "</head>"
+        "<body style=\"font-family: sans-serif; max-width: 48rem; margin: 3rem auto; padding: 0 1rem; line-height: 1.5;\">"
+        "<p>This space doesn't have a user interface. It is used to host an MCP server that can be found at: "
+        f"<a href='{mcp_url}'>{mcp_url}</a>. "
+        f"You can read more <a href='{SPACE_README_URL}'>here</a>.</p>"
+        "</body>"
+        "</html>"
+    )
+    return HTMLResponse(html)
 
 
 @mcp.tool
