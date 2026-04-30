@@ -8,8 +8,6 @@ app_port: 7860
 short_description: MCP server for Statskontoret website search.
 datasets:
   - Statskontoretdatalabb/StatskontoretWebsites
-preload_from_hub:
-  - datasets/Statskontoretdatalabb/StatskontoretWebsites statskontoret_pages.parquet,forum_pages.parquet,build.json
 tags:
   - mcp
   - swedish
