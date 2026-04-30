@@ -1,7 +1,21 @@
 ---
 title: Statskontoret MCP
+emoji: 📚
+colorFrom: blue
+colorTo: gray
 sdk: docker
 app_port: 7860
+short_description: MCP server for searching public Statskontoret website content.
+datasets:
+  - Statskontoretdatalabb/StatskontoretWebsites
+preload_from_hub:
+  - Statskontoretdatalabb/StatskontoretWebsites statskontoret_pages.parquet,forum_pages.parquet,build.json
+tags:
+  - mcp
+  - swedish
+  - public-sector
+  - statskontoret
+disable_embedding: true
 ---
 
 # Statskontoret MCP Space
