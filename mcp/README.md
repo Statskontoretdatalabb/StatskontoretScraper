@@ -9,7 +9,7 @@ short_description: MCP server for Statskontoret website search.
 datasets:
   - Statskontoretdatalabb/StatskontoretWebsites
 preload_from_hub:
-  - Statskontoretdatalabb/StatskontoretWebsites statskontoret_pages.parquet,forum_pages.parquet,build.json
+  - datasets/Statskontoretdatalabb/StatskontoretWebsites statskontoret_pages.parquet,forum_pages.parquet,build.json
 tags:
   - mcp
   - swedish
@@ -22,7 +22,7 @@ disable_embedding: true
 
 This is the code of a lightweight MCP server exposing a full text search API to browse through the content of Statskontoret's websites. It fetches its data from the HuggingFace dataset [Statskontoretdatalabb/StatskontoretWebsites](https://huggingface.co/datasets/Statskontoretdatalabb/StatskontoretWebsites).
 
-This directory is synced to the Hugging Face Space [Statskontoretdatalabb/StatskontoretMCP](https://huggingface.co/spaces/Statskontoretdatalabb/StatskontoretMCP). The space acts as the infrastructure for the server.
+This directory is synced to the Hugging Face Space [Statskontoretdatalabb/StatskontoretMCP](https://huggingface.co/spaces/Statskontoretdatalabb/StatskontoretMCP). The space acts as the infrastructure for the server. If you are reading this on HuggingFace, you can access the whole project's repository at [github.com/Statskontoretdatalabb/StatskontoretScraper](https://github.com/Statskontoretdatalabb/StatskontoretScraper).
 
 ## Tools
 
