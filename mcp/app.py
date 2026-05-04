@@ -41,8 +41,8 @@ class KnowledgeBase:
         self.dataset_info = self._load_dataset()
 
     def _load_dataset(self) -> DatasetInfo:
-        parquet_paths = [self._download_file(filename) for filename in PARQUET_FILES]
-        build_json = self._download_file("build.json")
+        parquet_paths = [self._resolve_file(filename) for filename in PARQUET_FILES]
+        build_json = self._resolve_file("build.json")
 
         self.conn.execute("INSTALL fts;")
         self.conn.execute("LOAD fts;")
@@ -81,6 +81,12 @@ class KnowledgeBase:
             },
         )
 
+    def _resolve_file(self, filename: str) -> str:
+        mounted_file = Path("/data") / filename
+        if mounted_file.is_file():
+            return str(mounted_file)
+        return self._download_file(filename)
+
     def _download_file(self, filename: str) -> str:
         return hf_hub_download(
             repo_id=self.dataset_repo_id,
@@ -94,12 +100,6 @@ class KnowledgeBase:
             "generated_at": self.dataset_info.generated_at,
             "page_count": self.dataset_info.page_count,
             "sources": self.dataset_info.sources,
-            "index_type": "duckdb_fts",
-            "document_granularity": "page",
-            "limitations": [
-                "Search is lexical BM25 over page-level documents.",
-                "The DuckDB FTS index is rebuilt on Space startup.",
-            ],
         }
 
     def browse_docs(
