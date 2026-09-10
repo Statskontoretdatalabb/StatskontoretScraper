@@ -14,7 +14,7 @@ jobs:
         with:
           enable-cache: true
       - name: Install dependencies
-        run: uv sync --frozen --extra ip-rotator
+        run: uv sync --frozen --extra dataset --extra ip-rotator
       - name: Build local artifacts
         env:
           USE_IP_ROTATOR: ${{ vars.USE_IP_ROTATOR }}

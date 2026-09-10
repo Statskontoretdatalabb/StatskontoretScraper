@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from importlib.resources import files
 from pathlib import Path
 
 
@@ -19,8 +20,14 @@ class SourceConfig:
 
 
 def load_sources(config_path: Path | None = None) -> list[SourceConfig]:
-    path = config_path or Path(__file__).resolve().parent.parent / "sources.json"
-    records = json.loads(path.read_text(encoding="utf-8"))
+    text = (
+        config_path.read_text(encoding="utf-8")
+        if config_path
+        else files("statskontoret_scraper").joinpath("sources.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    records = json.loads(text)
     return [
         SourceConfig(
             name=record["name"],

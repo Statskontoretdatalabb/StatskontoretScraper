@@ -1011,14 +1011,18 @@ name = "statskontoret-scraper"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "huggingface-hub" },
-    { name = "markdownify" },
-    { name = "pyarrow" },
+    { name = "beautifulsoup4" },
+    { name = "httpx" },
     { name = "python-dotenv" },
-    { name = "scrapy" },
 ]
 
 [package.optional-dependencies]
+dataset = [
+    { name = "huggingface-hub" },
+    { name = "markdownify" },
+    { name = "pyarrow" },
+    { name = "scrapy" },
+]
 ip-rotator = [
     { name = "httpx", extra = ["http2"] },
     { name = "httpx-ip-rotator" },
@@ -1026,15 +1030,17 @@ ip-rotator = [
 
 [package.metadata]
 requires-dist = [
+    { name = "beautifulsoup4", specifier = ">=4.13.0" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "httpx", extras = ["http2"], marker = "extra == 'ip-rotator'", specifier = ">=0.28.1" },
     { name = "httpx-ip-rotator", marker = "extra == 'ip-rotator'", specifier = ">=0.1.4" },
-    { name = "huggingface-hub", specifier = ">=0.34.0" },
-    { name = "markdownify", specifier = ">=1.1.0" },
-    { name = "pyarrow", specifier = ">=20.0.0" },
+    { name = "huggingface-hub", marker = "extra == 'dataset'", specifier = ">=0.34.0" },
+    { name = "markdownify", marker = "extra == 'dataset'", specifier = ">=1.1.0" },
+    { name = "pyarrow", marker = "extra == 'dataset'", specifier = ">=20.0.0" },
     { name = "python-dotenv", specifier = ">=1.1.0" },
-    { name = "scrapy", specifier = ">=2.13.0" },
+    { name = "scrapy", marker = "extra == 'dataset'", specifier = ">=2.13.0" },
 ]
-provides-extras = ["ip-rotator"]
+provides-extras = ["dataset", "ip-rotator"]
 
 [[package]]
 name = "tldextract"
