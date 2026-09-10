@@ -16,6 +16,22 @@ Using `uv`:
 uv sync
 ```
 
+AWS API Gateway IP rotation is optional. It is useful in GitHub Actions, where
+Statskontoret blocks non-EU traffic. To enable it, install the extra and provide
+AWS credentials in `.env` or the environment:
+
+```bash
+uv sync --extra ip-rotator
+USE_IP_ROTATOR=true
+AWS_ACCESS_KEY_ID=your-key
+AWS_SECRET_ACCESS_KEY=your-secret
+```
+
+The gateway uses the `eu-north-1` region and is removed after the crawl. Leave
+`USE_IP_ROTATOR` unset for normal local crawling. For GitHub Actions, add the AWS
+values as repository secrets and set the `USE_IP_ROTATOR` repository variable to
+`true`.
+
 To publish, create a `.env` file with:
 
 ```bash

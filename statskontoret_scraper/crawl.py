@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from dotenv import load_dotenv
 from scrapy.crawler import CrawlerProcess
 
 from statskontoret_scraper.config import SourceConfig, get_source, load_sources
+from statskontoret_scraper.ip_rotator import IpRotatorMiddleware
 from statskontoret_scraper.models import RawPage
 from statskontoret_scraper.spiders import ForumSpider, StatskontoretSpider
 
@@ -17,8 +19,8 @@ class CollectItemsPipeline:
         return item
 
 
-def _settings() -> dict[str, object]:
-    return {
+def _settings(sources: list[SourceConfig]) -> dict[str, object]:
+    settings: dict[str, object] = {
         "LOG_LEVEL": "INFO",
         "ROBOTSTXT_OBEY": True,
         "REQUEST_FINGERPRINTER_IMPLEMENTATION": "2.7",
@@ -26,6 +28,18 @@ def _settings() -> dict[str, object]:
             "statskontoret_scraper.crawl.CollectItemsPipeline": 100,
         },
     }
+    if IpRotatorMiddleware.is_enabled():
+        settings["DOWNLOADER_MIDDLEWARES"] = {
+            "statskontoret_scraper.ip_rotator.IpRotatorMiddleware": 800,
+        }
+        settings["IP_ROTATOR_DOMAINS"] = sorted(
+            {
+                f"https://{domain}"
+                for source in sources
+                for domain in source.allowed_domains
+            }
+        )
+    return settings
 
 
 def _spider_for_source(source: SourceConfig):
@@ -37,6 +51,7 @@ def _spider_for_source(source: SourceConfig):
 
 
 def crawl_sources(source_names: list[str] | None = None) -> list[RawPage]:
+    load_dotenv()
     sources = (
         [get_source(name) for name in source_names]
         if source_names
@@ -44,7 +59,7 @@ def crawl_sources(source_names: list[str] | None = None) -> list[RawPage]:
     )
 
     CollectItemsPipeline.items = []
-    process = CrawlerProcess(_settings())
+    process = CrawlerProcess(_settings(sources))
     for source in sources:
         process.crawl(_spider_for_source(source), source=source)
     process.start()

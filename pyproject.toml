@@ -16,6 +16,12 @@ dependencies = [
     "scrapy>=2.13.0",
 ]
 
+[project.optional-dependencies]
+ip-rotator = [
+    "httpx[http2]>=0.28.1",
+    "httpx-ip-rotator>=0.1.4",
+]
+
 [project.scripts]
 statskontoret-scraper = "statskontoret_scraper.cli:main"
 
