@@ -16,18 +16,24 @@ Using `uv`:
 uv sync
 ```
 
-This installs the lightweight föreskrifter client. Install the optional dataset
-dependencies to run the Scrapy crawler, build Parquet files, or publish to
-Hugging Face:
+This installs the lightweight föreskrifter client. Install the optional `crawl`
+dependencies to fetch pages with Scrapy and convert them to Markdown:
 
 ```bash
-uv sync --extra dataset
+uv sync --extra crawl
+```
+
+Install the separate publishing dependencies only when building Parquet files
+or publishing to Hugging Face:
+
+```bash
+uv sync --extra crawl --extra publish
 ```
 
 Install it as a dependency from GitHub in another project:
 
 ```bash
-uv add "statskontoret-scraper @ git+https://github.com/Statskontoretdatalabb/StatskontoretScraper.git"
+uv add "statskontoret-scraper[crawl] @ git+https://github.com/Statskontoretdatalabb/StatskontoretScraper.git"
 ```
 
 Fetch the current regulations and general advice from EA-regelverket as Python
@@ -44,8 +50,7 @@ PyArrow, Hugging Face, or Markdownify. The records preserve the HTML of
 `foreskrift` and `allmanna_rad` sections separately and include Ferenda's
 `fs`, `basefile`, `identifier`, `title`, `publisher`, and `url` metadata.
 
-The full dataset crawler remains available after installing the `dataset`
-extra:
+The full website crawler remains available after installing the `crawl` extra:
 
 ```python
 from statskontoret_scraper import crawl_sources
@@ -73,7 +78,7 @@ Statskontoret blocks non-EU traffic. To enable it, install the extra and provide
 AWS credentials in `.env` or the environment:
 
 ```bash
-uv sync --extra dataset --extra ip-rotator
+uv sync --extra crawl --extra ip-rotator
 USE_IP_ROTATOR=true
 AWS_ACCESS_KEY_ID=your-key
 AWS_SECRET_ACCESS_KEY=your-secret

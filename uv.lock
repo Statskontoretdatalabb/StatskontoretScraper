@@ -1017,15 +1017,17 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-dataset = [
-    { name = "huggingface-hub" },
+crawl = [
     { name = "markdownify" },
-    { name = "pyarrow" },
     { name = "scrapy" },
 ]
 ip-rotator = [
     { name = "httpx", extra = ["http2"] },
     { name = "httpx-ip-rotator" },
+]
+publish = [
+    { name = "huggingface-hub" },
+    { name = "pyarrow" },
 ]
 
 [package.metadata]
@@ -1034,13 +1036,13 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "httpx", extras = ["http2"], marker = "extra == 'ip-rotator'", specifier = ">=0.28.1" },
     { name = "httpx-ip-rotator", marker = "extra == 'ip-rotator'", specifier = ">=0.1.4" },
-    { name = "huggingface-hub", marker = "extra == 'dataset'", specifier = ">=0.34.0" },
-    { name = "markdownify", marker = "extra == 'dataset'", specifier = ">=1.1.0" },
-    { name = "pyarrow", marker = "extra == 'dataset'", specifier = ">=20.0.0" },
+    { name = "huggingface-hub", marker = "extra == 'publish'", specifier = ">=0.34.0" },
+    { name = "markdownify", marker = "extra == 'crawl'", specifier = ">=1.1.0" },
+    { name = "pyarrow", marker = "extra == 'publish'", specifier = ">=20.0.0" },
     { name = "python-dotenv", specifier = ">=1.1.0" },
-    { name = "scrapy", marker = "extra == 'dataset'", specifier = ">=2.13.0" },
+    { name = "scrapy", marker = "extra == 'crawl'", specifier = ">=2.13.0" },
 ]
-provides-extras = ["dataset", "ip-rotator"]
+provides-extras = ["crawl", "publish", "ip-rotator"]
 
 [[package]]
 name = "tldextract"
