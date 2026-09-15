@@ -39,3 +39,8 @@ statskontoret_scraper = ["sources.json"]
 
 [tool.setuptools.packages.find]
 include = ["statskontoret_scraper*"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4,<10",
+]
