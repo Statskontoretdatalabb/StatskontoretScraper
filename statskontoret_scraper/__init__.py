@@ -15,7 +15,10 @@ __all__ = [
 __version__ = "0.1.0"
 
 
-def crawl_sources(source_names: list[str] | None = None) -> list[RawPage]:
+def crawl_sources(
+    source_names: list[str] | None = None,
+    url_prefixes: list[str] | None = None,
+) -> list[RawPage]:
     from statskontoret_scraper.crawl import crawl_sources as run_crawl
 
-    return run_crawl(source_names)
+    return run_crawl(source_names, url_prefixes)

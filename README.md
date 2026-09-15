@@ -53,6 +53,17 @@ from statskontoret_scraper import crawl_sources
 pages = crawl_sources(["forum"])
 ```
 
+Restrict a crawl to one URL tree when only a section of a source is needed:
+
+```python
+pages = crawl_sources(
+    ["forum"],
+    url_prefixes=["https://forum.statskontoret.se/konsekvensutredning/"],
+)
+```
+
+Links outside the supplied prefixes are not requested.
+
 `crawl_sources()` starts Scrapy's reactor and should only be called once in a
 process. Run it in a separate process when integrating it into a long-running
 application or when multiple crawls are needed.
