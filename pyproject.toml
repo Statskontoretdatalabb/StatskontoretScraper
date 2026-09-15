@@ -15,11 +15,13 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dataset = [
-    "huggingface_hub>=0.34.0",
+crawl = [
     "markdownify>=1.1.0",
-    "pyarrow>=20.0.0",
     "scrapy>=2.13.0",
+]
+publish = [
+    "huggingface_hub>=0.34.0",
+    "pyarrow>=20.0.0",
 ]
 ip-rotator = [
     "httpx[http2]>=0.28.1",
