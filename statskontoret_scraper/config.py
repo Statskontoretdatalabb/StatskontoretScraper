@@ -16,6 +16,7 @@ class SourceConfig:
     title_selector: str
     updated_meta_names: tuple[str, ...]
     exclude_url_prefixes: tuple[str, ...] = ()
+    include_url_prefixes: tuple[str, ...] = ()
     link_selectors: tuple[str, ...] = ()
 
 
@@ -38,6 +39,7 @@ def load_sources(config_path: Path | None = None) -> list[SourceConfig]:
             title_selector=record["title_selector"],
             updated_meta_names=tuple(record.get("updated_meta_names", [])),
             exclude_url_prefixes=tuple(record.get("exclude_url_prefixes", [])),
+            include_url_prefixes=tuple(record.get("include_url_prefixes", [])),
             link_selectors=tuple(record.get("link_selectors", [])),
         )
         for record in records

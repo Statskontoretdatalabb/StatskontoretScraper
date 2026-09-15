@@ -15,7 +15,13 @@ class BasePageSpider:
     source: SourceConfig
 
     def should_skip(self, url: str) -> bool:
-        return any(url.startswith(prefix) for prefix in self.source.exclude_url_prefixes)
+        excluded = any(
+            url.startswith(prefix) for prefix in self.source.exclude_url_prefixes
+        )
+        outside_scope = bool(self.source.include_url_prefixes) and not any(
+            url.startswith(prefix) for prefix in self.source.include_url_prefixes
+        )
+        return excluded or outside_scope
 
     def is_html(self, response: Response) -> bool:
         content_type = response.headers.get("Content-Type", b"").decode("latin-1")
@@ -73,5 +79,7 @@ class ForumSpider(scrapy.Spider, BasePageSpider):
         for selector in self.source.link_selectors:
             for href in response.css(selector).getall():
                 url = response.urljoin(href)
-                if any(domain in url for domain in self.allowed_domains):
+                if not self.should_skip(url) and any(
+                    domain in url for domain in self.allowed_domains
+                ):
                     yield scrapy.Request(url, callback=self.parse)

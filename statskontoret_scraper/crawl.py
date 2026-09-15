@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from dotenv import load_dotenv
 from scrapy.crawler import CrawlerProcess
@@ -50,13 +52,48 @@ def _spider_for_source(source: SourceConfig):
     raise ValueError(f"Unsupported source kind: {source.kind}")
 
 
-def crawl_sources(source_names: list[str] | None = None) -> list[RawPage]:
+def _scope_sources(
+    sources: list[SourceConfig], url_prefixes: list[str] | None
+) -> list[SourceConfig]:
+    if not url_prefixes:
+        return sources
+
+    scoped: list[SourceConfig] = []
+    unmatched = set(url_prefixes)
+    for source in sources:
+        matching = tuple(
+            prefix
+            for prefix in url_prefixes
+            if urlsplit(prefix).hostname in source.allowed_domains
+        )
+        if not matching:
+            continue
+        unmatched.difference_update(matching)
+        scoped.append(
+            replace(
+                source,
+                start_urls=matching,
+                include_url_prefixes=matching,
+            )
+        )
+
+    if unmatched:
+        raise ValueError(
+            "URL prefixes do not match the selected sources: "
+            + ", ".join(sorted(unmatched))
+        )
+    return scoped
+
+
+def crawl_sources(
+    source_names: list[str] | None = None,
+    url_prefixes: list[str] | None = None,
+) -> list[RawPage]:
     load_dotenv()
-    sources = (
-        [get_source(name) for name in source_names]
-        if source_names
-        else load_sources()
+    selected_sources = (
+        [get_source(name) for name in source_names] if source_names else load_sources()
     )
+    sources = _scope_sources(selected_sources, url_prefixes)
 
     CollectItemsPipeline.items = []
     process = CrawlerProcess(_settings(sources))
