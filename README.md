@@ -123,6 +123,9 @@ uv run statskontoret-scraper build
 ```
 
 Artifacts are written to `build/latest/`.
+`statskontoret_pages.parquet` contains both Statskontoret and Antikorruption
+pages, distinguished by the `source_system` column. Forum pages are written to
+`forum_pages.parquet`.
 
 Run a single source:
 
