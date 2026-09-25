@@ -43,6 +43,14 @@ def extract_markdown(response: Response, source: SourceConfig) -> tuple[str, str
     if not html:
         raise ValueError(f"No content node found for {response.url}")
 
+    if (
+        source.name == "antikorruption"
+        and urlsplit(response.url).path.rstrip("/") == "/antikorruption"
+    ):
+        hero = response.css("section.hero").get()
+        if hero:
+            html = hero + html
+
     markdown = to_markdown(html, heading_style="ATX")
     markdown = normalize_markdown(markdown)
     plain_text = normalize_text(markdown.replace("#", " "))
