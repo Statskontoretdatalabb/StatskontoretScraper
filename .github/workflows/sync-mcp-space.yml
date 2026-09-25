@@ -14,10 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: huggingface/hub-sync@v0.1.0
-        with:
-          github_repo_id: ${{ github.repository }}
-          huggingface_repo_id: Statskontoretdatalabb/StatskontoretMCP
-          hf_token: ${{ secrets.HF_TOKEN }}
-          repo_type: space
-          subdirectory: mcp
+      - uses: astral-sh/setup-uv@v7
+      - name: Sync MCP directory to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          uvx --from huggingface_hub==1.11.0 hf upload \
+            Statskontoretdatalabb/StatskontoretMCP mcp . \
+            --repo-type space \
+            --delete "*" \
+            --commit-message "Sync MCP Space from GitHub"
