@@ -8,7 +8,9 @@ from scrapy.spiders import SitemapSpider
 from scrapy.utils.sitemap import Sitemap
 
 from statskontoret_scraper.config import SourceConfig
-from statskontoret_scraper.normalize import build_raw_page
+from statskontoret_scraper.normalize import build_raw_page, extract_grant_metadata
+
+GRANTS_INDEX_URL = "https://www.statskontoret.se/statsbidrag/hitta-statsbidrag/"
 
 
 class BasePageSpider:
@@ -46,6 +48,11 @@ class StatskontoretSpider(SitemapSpider, BasePageSpider):
         self.sitemap_urls = list(source.start_urls)
         super().__init__(*args, **kwargs)
 
+    def start_requests(self):
+        yield from super().start_requests()
+        if not self.should_skip(GRANTS_INDEX_URL):
+            yield scrapy.Request(GRANTS_INDEX_URL, callback=self.parse_grants_index)
+
     def parse(self, response: Response, **kwargs):
         page = self.parse_page(response)
         if page:
@@ -56,6 +63,29 @@ class StatskontoretSpider(SitemapSpider, BasePageSpider):
             loc = entry.get("loc")
             if loc and not self.should_skip(loc):
                 yield entry
+
+    def parse_grants_index(self, response: Response):
+        if response.url == GRANTS_INDEX_URL:
+            page = self.parse_page(response)
+            if page:
+                yield page
+
+        for href in response.css("ul.search_results h2 a::attr(href)").getall():
+            url = response.urljoin(href)
+            if not self.should_skip(url):
+                yield scrapy.Request(url, callback=self.parse_grant)
+
+        next_page = response.css("nav.pagination li.next button::attr(value)").get()
+        if next_page:
+            url = response.urljoin(f"{GRANTS_INDEX_URL}Sok?P={next_page}")
+            if not self.should_skip(url):
+                yield scrapy.Request(url, callback=self.parse_grants_index)
+
+    def parse_grant(self, response: Response):
+        page = self.parse_page(response)
+        if page:
+            page.update(extract_grant_metadata(response))
+            yield page
 
 
 class ForumSpider(scrapy.Spider, BasePageSpider):

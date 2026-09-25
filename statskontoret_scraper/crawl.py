@@ -101,19 +101,7 @@ def crawl_sources(
         process.crawl(_spider_for_source(source), source=source)
     process.start()
 
-    return [
-        RawPage(
-            page_id=item["page_id"],
-            source_system=item["source_system"],
-            source_url=item["source_url"],
-            title=item["title"],
-            markdown_content=item["markdown_content"],
-            plain_text_content=item["plain_text_content"],
-            updated_at=item["updated_at"],
-            content_hash=item["content_hash"],
-        )
-        for item in CollectItemsPipeline.items
-    ]
+    return [RawPage(**item) for item in CollectItemsPipeline.items]
 
 
 def default_output_dir() -> Path:
