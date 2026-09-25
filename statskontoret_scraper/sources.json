@@ -8,12 +8,24 @@
     "title_selector": "h1::text",
     "updated_meta_names": ["last-modified", "revised"],
     "exclude_url_prefixes": [
+      "https://www.statskontoret.se/antikorruption/",
       "https://www.statskontoret.se/Sok/",
       "https://www.statskontoret.se/sok/",
       "https://www.statskontoret.se/personal/",
       "https://www.statskontoret.se/specialsidor/",
       "https://www.statskontoret.se/kunskapsstod-och-regler/utbildningar/import-externt-system/"
     ]
+  },
+  {
+    "name": "antikorruption",
+    "kind": "sitemap",
+    "allowed_domains": ["www.statskontoret.se"],
+    "start_urls": ["https://www.statskontoret.se/sitemap.xml"],
+    "include_url_prefixes": ["https://www.statskontoret.se/antikorruption/"],
+    "exclude_url_prefixes": ["https://www.statskontoret.se/antikorruption/sok/"],
+    "content_selectors": ["article", "main#content"],
+    "title_selector": "h1::text",
+    "updated_meta_names": ["last-modified", "revised"]
   },
   {
     "name": "forum",

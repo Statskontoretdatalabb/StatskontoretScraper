@@ -16,5 +16,5 @@ class PackageTest(unittest.TestCase):
 
         self.assertEqual(
             [source.name for source in sources],
-            ["statskontoret", "forum"],
+            ["statskontoret", "antikorruption", "forum"],
         )

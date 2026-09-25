@@ -58,6 +58,11 @@ from statskontoret_scraper import crawl_sources
 pages = crawl_sources(["forum"])
 ```
 
+The full crawl also includes Antikorruption.se pages under
+`www.statskontoret.se/antikorruption/` as the `antikorruption` source. To crawl
+only that section, use `crawl_sources(["antikorruption"])` or
+`uv run statskontoret-scraper crawl --source antikorruption`.
+
 Restrict a crawl to one URL tree when only a section of a source is needed:
 
 ```python

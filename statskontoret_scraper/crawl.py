@@ -72,7 +72,7 @@ def _scope_sources(
         scoped.append(
             replace(
                 source,
-                start_urls=matching,
+                start_urls=source.start_urls if source.kind == "sitemap" else matching,
                 include_url_prefixes=matching,
             )
         )
