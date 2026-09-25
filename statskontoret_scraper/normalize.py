@@ -76,3 +76,42 @@ def build_raw_page(response: Response, source: SourceConfig) -> RawPage:
         updated_at=extract_updated_at(response, source),
         content_hash=content_hash,
     )
+
+
+def extract_grant_metadata(response: Response) -> dict[str, str | None]:
+    labels = {
+        "Ansökningsperiod": "application_period",
+        "Rekvisitionsperiod": "requisition_period",
+        "Bidragsperiod": "grant_period",
+        "Status för ansökan/rekvisition": "application_status",
+        "Område": "area",
+        "För vilka": "eligible_recipients",
+    }
+    metadata: dict[str, str | None] = {}
+    for strong in response.css("article#page .statsbidrag-fact-box strong"):
+        label = normalize_text(strong.css("::text").get() or "").rstrip(":")
+        field = labels.get(label)
+        if field:
+            value = strong.xpath("following-sibling::span[1]//text()").getall()
+            metadata[field] = normalize_text(" ".join(value)) or None
+
+    link = response.xpath(
+        '//article[@id="page"]//p[strong[normalize-space()="Ansvarig myndighet:"]]/a[1]'
+    )
+    if link:
+        metadata["responsible_agency"] = normalize_text(
+            " ".join(link.xpath(".//text()").getall())
+        ) or None
+        agency_href = link.attrib.get("href")
+        metadata["agency_url"] = response.urljoin(agency_href) if agency_href else None
+
+    application_href = response.css("article#page a.btn-primary::attr(href)").get()
+    metadata["application_url"] = (
+        response.urljoin(application_href) if application_href else None
+    )
+    amount = response.xpath(
+        '//article[@id="page"]//h2[normalize-space()="Statsbidragets storlek"]'
+        '/following-sibling::p[1]//text()'
+    ).getall()
+    metadata["total_amount"] = normalize_text(" ".join(amount)) or None
+    return metadata
