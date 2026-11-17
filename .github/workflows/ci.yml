@@ -32,3 +32,6 @@ jobs:
 
       - name: Run tests
         run: uv run --no-sync pytest
+
+      - name: Run MCP tests
+        run: uv run --project mcp --frozen --python 3.12 -m unittest discover -s mcp -p "check_*.py"

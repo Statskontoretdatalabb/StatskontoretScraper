@@ -12,6 +12,7 @@ from typing import Any
 import duckdb
 from fastmcp import FastMCP
 from huggingface_hub import hf_hub_download
+from nyckeltal import register_tools
 from starlette.responses import HTMLResponse
 
 DATASET_REPO_ID = "Statskontoretdatalabb/StatskontoretWebsites"
@@ -222,7 +223,9 @@ mcp = FastMCP(
     version="0.1.0",
     instructions=(
         "Use this server to search and fetch public page-level content from Statskontoret websites. "
-        "Search results are lexical and should usually be followed by fetch_doc for the full markdown."
+        "Search results are lexical and should usually be followed by fetch_doc for the full markdown. "
+        "Use list_metrics and find_agencies to discover agency indicators, get_indicators for annual values, "
+        "and show_comparison for an interactive chart. Indicator data is a fixed snapshot with no accuracy guarantee."
     ),
 )
 
@@ -286,6 +289,9 @@ def fetch_doc(page_id: str) -> dict[str, Any]:
 def browse_docs(limit: int = 50, source: str | None = None) -> list[dict[str, Any]]:
     """Browse available pages, optionally filtered by source."""
     return kb.browse_docs(limit=limit, source=source)
+
+
+register_tools(mcp)
 
 
 if __name__ == "__main__":

@@ -4,3 +4,6 @@ __pycache__/
 *.egg-info/
 build/
 .env
+
+# MCP app build dependencies
+mcp/ui/node_modules/

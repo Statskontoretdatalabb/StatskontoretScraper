@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "statskontoret-mcp"
 version = "0.1.0"
-description = "FastMCP server for the Statskontoret public knowledge base."
+description = "FastMCP server for Statskontoret websites and agency indicators."
 requires-python = ">=3.12"
 dependencies = [
     "duckdb>=1.4.0",
@@ -15,4 +15,4 @@ dependencies = [
 ]
 
 [tool.setuptools]
-py-modules = ["app"]
+py-modules = ["app", "nyckeltal"]
